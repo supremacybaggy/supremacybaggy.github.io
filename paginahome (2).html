@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supremacy Baggy - Street Fashion</title>
+    <meta name="description" content="Supremacy Baggy - Moda street premium para o público jovem">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .logo {
+            height: 50px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            position: absolute;
+            right: 0;
+        }
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: #000;
+            border-left: 1px solid #333;
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding: 2rem;
+        }
+        .nav-menu.open {
+            right: 0;
+        }
+        .nav-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 2rem;
+        }
+        .nav-links {
+            list-style: none;
+        }
+        .nav-links li {
+            margin-bottom: 1rem;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #ccc;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        /* Added padding-top to push content below fixed header */
+        #main-content {
+            padding-top: 80px;
+        }
+        .banner {
+            width: 100%;
+            max-width: 100%;
+            height: clamp(300px, 50vh, 600px);
+            background: #111;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 0;
+        }
+        .banner.active {
+            display: flex;
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            max-width: 100%;
+        }
+        .products-section {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-top: 1rem;
+        }
+        .view-all-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.5rem 2rem;
+            border: 1px solid #666;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .view-all-link:hover {
+            border-color: #fff;
+            background: #fff;
+            color: #000;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+        .product-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        .product-info {
+            padding: 0.6rem;
+        }
+        .product-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-price {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.4rem;
+        }
+        .product-description {
+            font-size: 0.7rem;
+            color: #ccc;
+            margin-bottom: 0.4rem;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-variations {
+            display: flex;
+            gap: 0.2rem;
+            margin-bottom: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .variation-item {
+            padding: 0.15rem 0.4rem;
+            background: #333;
+            border-radius: 2px;
+            font-size: 0.6rem;
+            font-weight: 500;
+        }
+        #particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        @media (max-width: 768px) {
+            /* Adjusted padding-top for mobile header height */
+            #main-content {
+                padding-top: 60px;
+            }
+            .header {
+                padding: 0.5rem 1rem;
+                height: 60px;
+            }
+            .logo {
+                height: 40px;
+            }
+            .products-section {
+                padding: 1rem 0.5rem;
+            }
+            .section-title {
+                font-size: 1.4rem;
+                margin-bottom: 0.5rem;
+            }
+            .products-grid {
+                gap: 0.5rem;
+            }
+            .banner {
+                height: clamp(200px, 40vh, 400px);
+            }
+            .section-header {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                gap: 1rem;
+            }
+            .view-all-link {
+                font-size: 0.7rem;
+                padding: 0.4rem 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .banner {
+                height: clamp(180px, 35vh, 300px);
+            }
+            .header {
+                padding: 0.5rem;
+            }
+            .products-grid {
+                gap: 0.5rem;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .product-image {
+                height: auto;
+            }
+            .product-info {
+                padding: 0.5rem;
+            }
+            .product-title {
+                font-size: 0.75rem;
+            }
+            .product-price {
+                font-size: 0.9rem;
+            }
+            .variation-item {
+                padding: 0.1rem 0.3rem;
+                font-size: 0.55rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-bg"></canvas>
+    <div id="main-content">
+        <header class="header">
+            <div class="header-content">
+                <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
+                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            </div>
+        </header>
+        <nav class="nav-menu" id="nav-menu">
+            <button class="nav-close" onclick="toggleMenu()">✕</button>
+            <ul class="nav-links">
+                <!-- URLs atualizadas para GitHub Pages -->
+                <li><a href="https://supremacybaggy.github.io/paginahome.html">Home</a></li>
+                <li><a href="https://supremacybaggy.github.io/categorias.html">Categorias</a></li>
+                <li><a href="https://supremacybaggy.github.io/produtosgeral.html">Produtos</a></li>
+                <li><a href="https://supremacybaggy.github.io/favoritos.html">Favoritos</a></li>
+                <li><a href="https://supremacybaggy.github.io/carrinho.html">Carrinho</a></li>
+                <li><a href="https://supremacybaggy.github.io/perfil.html">Perfil</a></li>
+                <li id="admin-link" style="display: none;"><a href="https://supremacybaggy.github.io/paineladmin.html">Painel Admin</a></li>
+                <li><a href="#" onclick="logout()">Sair</a></li>
+            </ul>
+        </nav>
+        <section class="banner" id="banner-section">
+            <img id="banner-image" src="/placeholder.svg" alt="Banner">
+        </section>
+        <section class="products-section" id="products-section">
+            <div class="section-header">
+                <h2 class="section-title">Produtos em Destaque</h2>
+                <!-- URL atualizada para GitHub Pages -->
+                <a href="https://supremacybaggy.github.io/produtosgeral.html" class="view-all-link">Ver Tudo</a>
+            </div>
+            <div id="products-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCbGwo74XhjxyorPEvz3WHZgGV6BESGZw8",
+            authDomain: "supbaggy.firebaseapp.com",
+            databaseURL: "https://supbaggy-default-rtdb.firebaseio.com",
+            projectId: "supbaggy",
+            storageBucket: "supbaggy.firebasestorage.app",
+            messagingSenderId: "304795544101",
+            appId: "1:304795544101:web:5de2ecc82c07fd9fe42dcc"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const analytics = firebase.analytics();
+        function initParticlesBackground() {
+            const canvas = document.getElementById('particles-bg');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const particles = [];
+            const particleCount = 50;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
+        function toggleMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('open');
+        }
+        function checkAuth() {
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    window.location.href = 'https://supremacybaggy.github.io/login.html';
+                    return;
+                }
+                if (user.email === 'supremacybaggy@gmail.com') {
+                    document.getElementById('admin-link').style.display = 'block';
+                }
+                loadSiteConfig();
+                loadProducts();
+            });
+        }
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = 'https://supremacybaggy.github.io/login.html';
+            });
+        }
+        function loadSiteConfig() {
+            database.ref('config').once('value', snapshot => {
+                const config = snapshot.val();
+                if (config) {
+                    if (config.logoUrl) {
+                        document.getElementById('header-logo').src = config.logoUrl;
+                    }
+                    const bannerSection = document.getElementById('banner-section');
+                    const productsSection = document.getElementById('products-section');
+                    if (config.bannerUrl && config.bannerUrl.trim() !== '') {
+                        document.getElementById('banner-image').src = config.bannerUrl;
+                        bannerSection.classList.add('active');
+                    } else {
+                        bannerSection.classList.remove('active');
+                    }
+                }
+            });
+        }
+        function loadProducts() {
+            const container = document.getElementById('products-container');
+            database.ref('products').orderByChild('active').equalTo(true).once('value', snapshot => {
+                const products = snapshot.val();
+                if (!products) {
+                    container.innerHTML = '<p style="text-align: center; color: #666;">Nenhum produto encontrado.</p>';
+                    return;
+                }
+                let html = '<div class="products-grid">';
+                Object.values(products).forEach(product => {
+                    const variations = product.variations || {};
+                    const colors = variations.cores || [];
+                    const sizes = variations.tamanhos || [];
+                    html += `
+                        <div class="product-card" onclick="viewProduct('${product.id}')">
+                            <div class="product-image">
+                                <img src="${product.images[0] || '/placeholder.svg?height=200&width=280'}"
+                                      alt="${product.title}" loading="lazy">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">${product.title}</h3>
+                                <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                                <p class="product-description">${product.description.substring(0, 80)}...</p>
+                                <div class="product-variations">
+                                    ${colors.slice(0, 3).map(color => `<span class="variation-item">${color}</span>`).join('')}
+                                    ${sizes.slice(0, 2).map(size => `<span class="variation-item">${size}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+                analytics.logEvent('view_item_list', {
+                    item_list_name: 'home_products'
+                });
+            });
+        }
+        function viewProduct(productId) {
+            window.location.href = `https://supremacybaggy.github.io/produto.html#${productId}`;
+        }
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('particles-bg');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticlesBackground();
+            checkAuth();
+        });
+    </script>
+</body>
+</html>

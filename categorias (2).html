@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias - Supremacy Baggy</title>
+    <meta name="description" content="Explore nossas categorias de produtos - Supremacy Baggy">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo {
+            height: 120px;
+            max-width: 400px;
+            object-fit: contain;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            position: absolute;
+            right: 0;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: #000;
+            border-left: 1px solid #333;
+            transition: right 0.3s ease;
+            z-index: 1001;
+            padding: 2rem;
+        }
+
+        .nav-menu.open {
+            right: 0;
+        }
+
+        .nav-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 2rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 1rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ccc;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            height: 220px;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #222, #111);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover .category-image img {
+            transform: scale(1.1);
+        }
+
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .category-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .category-count {
+            font-size: 0.9rem;
+            color: #ccc;
+            font-weight: 400;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .category-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: currentColor;
+        }
+
+        .filters-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .filters-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .refresh-btn {
+            padding: 0.6rem 1.2rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .refresh-btn:hover {
+            background: #ddd;
+            transform: scale(1.05);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.98);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-select {
+            padding: 0.7rem;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .products-section {
+            margin-top: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem;
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: #fff;
+            color: #000;
+        }
+
+        .view-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-card.list-view {
+            display: flex;
+            height: 150px;
+        }
+
+        .product-card.list-view .product-image {
+            width: 200px;
+            height: 100%;
+        }
+
+        .product-card.list-view .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .categories-grid {
+                gap: 1rem;
+            }
+
+            .category-card {
+                height: 180px;
+            }
+
+            .category-title {
+                font-size: 1.3rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .products-grid {
+                gap: 1rem;
+            }
+
+            .product-info {
+                padding: 0.8rem;
+            }
+
+            .product-title {
+                font-size: 0.95rem;
+            }
+
+            .product-price {
+                font-size: 1.1rem;
+            }
+
+            .product-card.list-view {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .product-card.list-view .product-image {
+                width: 100%;
+                height: 180px;
+            }
+
+            .product-card.list-view .product-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-card {
+                height: 150px;
+            }
+
+            .category-icon svg {
+                width: 35px;
+                height: 35px;
+            }
+
+            .category-title {
+                font-size: 1.1rem;
+            }
+
+            .product-image {
+                height: 150px;
+            }
+
+            .products-grid {
+                gap: 0.75rem;
+            }
+
+            .product-info {
+                padding: 0.6rem;
+            }
+
+            .product-title {
+                font-size: 0.85rem;
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <nav class="nav-menu" id="nav-menu">
+        <button class="nav-close" onclick="toggleMenu()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+        </button>
+        <ul class="nav-links">
+            <li><a href="https://supremacybaggy.github.io/paginahome.html">Home</a></li>
+            <li><a href="https://supremacybaggy.github.io/categorias.html">Categorias</a></li>
+            <li><a href="https://supremacybaggy.github.io/produtosgeral.html">Produtos</a></li>
+            <li><a href="https://supremacybaggy.github.io/favoritos.html">Favoritos</a></li>
+            <li><a href="https://supremacybaggy.github.io/carrinho.html">Carrinho</a></li>
+            <li><a href="https://supremacybaggy.github.io/perfil.html">Perfil</a></li>
+            <li id="admin-link" style="display: none;"><a href="https://supremacybaggy.github.io/paineladmin.html">Painel Admin</a></li>
+            <li><a href="#" onclick="logout()">Sair</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <h1 class="page-title">Categorias</h1>
+        
+        <section class="categories-grid" id="categories-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </section>
+
+        <section class="filters-section">
+            <div class="filters-header">
+                <h2 class="filters-title">Filtros</h2>
+                <button class="refresh-btn" onclick="resetFilters()">Atualizar</button>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Categoria</label>
+                    <select class="filter-select" id="category-filter" onchange="applyFilters()">
+                        <option value="">Todas as categorias</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Preço</label>
+                    <select class="filter-select" id="price-filter" onchange="applyFilters()">
+                        <option value="">Todos os preços</option>
+                        <option value="0-50">Até R$ 50</option>
+                        <option value="50-100">R$ 50 - R$ 100</option>
+                        <option value="100-200">R$ 100 - R$ 200</option>
+                        <option value="200+">Acima de R$ 200</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Ordenar por</label>
+                    <select class="filter-select" id="sort-filter" onchange="applyFilters()">
+                        <option value="name">Nome</option>
+                        <option value="price-asc">Menor preço</option>
+                        <option value="price-desc">Maior preço</option>
+                        <option value="newest">Mais recente</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header">
+                <h2 class="section-title" id="products-title">Todos os Produtos</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setView('grid')">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/>
+                        </svg>
+                    </button>
+                    <button class="view-btn" onclick="setView('list')">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="products-container" class="products-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCbGwo74XhjxyorPEvz3WHZgGV6BESGZw8",
+            authDomain: "supbaggy.firebaseapp.com",
+            databaseURL: "https://supbaggy-default-rtdb.firebaseio.com",
+            projectId: "supbaggy",
+            storageBucket: "supbaggy.firebasestorage.app",
+            messagingSenderId: "304795544101",
+            appId: "1:304795544101:web:5de2ecc82c07fd9fe42dcc"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const analytics = firebase.analytics();
+
+        let allProducts = [];
+        let filteredProducts = [];
+        let categories = {};
+        let currentView = 'grid';
+        let currentUser = null;
+
+        function checkAuth() {
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    window.location.href = 'https://supremacybaggy.github.io/login.html';
+                    return;
+                }
+                
+                currentUser = user;
+                
+                if (user.email === 'supremacybaggy@gmail.com') {
+                    document.getElementById('admin-link').style.display = 'block';
+                }
+
+                loadSiteConfig();
+                loadProducts();
+            });
+        }
+
+        function loadSiteConfig() {
+            database.ref('config').once('value', snapshot => {
+                const config = snapshot.val();
+                if (config && config.logoUrl) {
+                    document.getElementById('header-logo').src = config.logoUrl;
+                }
+            });
+        }
+
+        function loadProducts() {
+            database.ref('products').orderByChild('active').equalTo(true).once('value', snapshot => {
+                const products = snapshot.val();
+                
+                if (!products) {
+                    document.getElementById('categories-container').innerHTML = 
+                        '<p style="text-align: center; color: #666;">Nenhum produto encontrado.</p>';
+                    return;
+                }
+
+                allProducts = Object.values(products);
+                processCategories();
+                renderCategories();
+                populateFilters();
+                // Inicializa os filtros e renderiza produtos na primeira carga
+                applyFilters();
+            });
+        }
+
+        function processCategories() {
+            categories = {};
+            
+            allProducts.forEach(product => {
+                const category = product.category || 'Outros';
+                if (!categories[category]) {
+                    categories[category] = {
+                        name: category,
+                        count: 0,
+                        products: []
+                    };
+                }
+                categories[category].count++;
+                categories[category].products.push(product);
+            });
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            
+            const categoryIcons = {
+                'Camisetas': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M16 21v-2l1.54-1.54C16.6 16.6 16 15.42 16 14V8c0-2.21-1.79-4-4-4s-4 1.79-4 4v6c0 1.42-.6 2.6-1.54 3.46L8 19v2H6v-2.17c-1.16-1.16-2-2.78-2-4.83V8c0-3.31 2.69-6 6-6s6 2.69 6 6v6c0 2.05-.84 3.67-2 4.83V21h-2z"/></svg>',
+                'Calças': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M16.5 3h-9C6.67 3 6 3.67 6 4.5v15c0 .83.67 1.5 1.5 1.5h4c.83 0 1.5-.67 1.5-1.5V13h2v6.5c0 .83.67 1.5 1.5 1.5h4c.83 0 1.5-.67 1.5-1.5V8c0-1.1-.9-2-2-2zM9 4h6v2H9V4zm11 15H4V8h16v11z"/></svg>',
+                'Acessórios': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M20 6h-3V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM9 4h6v2H9V4zm11 15H4V8h16v11z"/></svg>',
+                'Tênis': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M12.5 3c-1.28 0-2.5.5-3.5 1.41V3H4v5h5V6.5c.55-.61 1.35-1 2.5-1 1.93 0 3.5 1.57 3.5 3.5v.5h-2v2h2v2h-2v2h2v2h-2v2h9V9.5C20 5.91 16.59 3 12.5 3z"/></svg>',
+                'Bonés': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8zm-5-9h10v2H7z"/></svg>',
+                'Outros': '<svg viewBox="0 0 24 24" width="50" height="50" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h12v12z"/></svg>'
+            };
+            
+            let html = '';
+            
+            Object.values(categories).forEach(category => {
+                const icon = categoryIcons[category.name] || categoryIcons['Outros'];
+                
+                html += `
+                    <div class="category-card" onclick="filterByCategory('${category.name}')">
+                        <div class="category-image">
+                            <div class="category-overlay">
+                                <div class="category-icon">${icon}</div>
+                                <h3 class="category-title">${category.name}</h3>
+                                <p class="category-count">${category.count} produto${category.count !== 1 ? 's' : ''}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function populateFilters() {
+            const categoryFilter = document.getElementById('category-filter');
+            
+            categoryFilter.innerHTML = '<option value="">Todas as categorias</option>';
+            
+            Object.keys(categories).forEach(categoryName => {
+                const option = document.createElement('option');
+                option.value = categoryName;
+                option.textContent = categoryName;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function filterByCategory(categoryName) {
+            document.getElementById('category-filter').value = categoryName;
+            applyFilters();
+            
+            document.querySelector('.products-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function applyFilters() {
+            const categoryFilter = document.getElementById('category-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            
+            // Começa com todos os produtos e filtra
+            filteredProducts = [...allProducts];
+            
+            if (categoryFilter) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.category === categoryFilter
+                );
+            }
+            
+            if (priceFilter) {
+                const [min, max] = priceFilter.split('-').map(p => p === '+' ? Infinity : parseFloat(p));
+                filteredProducts = filteredProducts.filter(product => {
+                    if (max === undefined) return product.price >= min;
+                    return product.price >= min && product.price <= max;
+                });
+            }
+            
+            switch (sortFilter) {
+                case 'name':
+                    filteredProducts.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    break;
+            }
+            
+            renderProducts();
+            updateProductsTitle(categoryFilter);
+        }
+
+        function updateProductsTitle(category) {
+            const title = document.getElementById('products-title');
+            if (category) {
+                title.textContent = `${category} (${filteredProducts.length})`;
+            } else {
+                title.textContent = `Todos os Produtos (${filteredProducts.length})`;
+            }
+        }
+
+        function setView(view) {
+            currentView = view;
+            
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            // Sempre usar filteredProducts que já contém todos os produtos na primeira carga
+            const products = filteredProducts;
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">Nenhum produto encontrado.</p>';
+                return;
+            }
+            
+            container.className = currentView === 'grid' ? 'products-grid' : 'products-list';
+            
+            let html = '';
+            
+            products.forEach(product => {
+                html += `
+                    <div class="product-card ${currentView === 'list' ? 'list-view' : ''}" 
+                         onclick="viewProduct('${product.id}')">
+                        <div class="product-image">
+                            <img src="${product.images[0] || '/placeholder.svg?height=200&width=280'}" 
+                                 alt="${product.title}" loading="lazy">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">${product.title}</h3>
+                            <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                            <p class="product-category">${product.category || 'Outros'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            analytics.logEvent('view_item_list', {
+                item_list_name: 'categories_page'
+            });
+        }
+
+        function viewProduct(productId) {
+            window.location.href = `https://supremacybaggy.github.io/produto.html#${productId}`;
+        }
+
+        function resetFilters() {
+            document.getElementById('category-filter').value = '';
+            document.getElementById('price-filter').value = '';
+            document.getElementById('sort-filter').value = 'name';
+            // Aplica os filtros após resetar para renderizar página completa
+            applyFilters();
+        }
+
+        function toggleMenu() {
+            document.getElementById('nav-menu').classList.toggle('open');
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = 'https://supremacybaggy.github.io/login.html';
+            });
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>
