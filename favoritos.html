@@ -376,10 +376,10 @@
             });
         }
         function loadSiteConfig() {
-            database.ref('config').once('value', snapshot => {
-                const config = snapshot.val();
-                if (config && config.logoUrl) {
-                    document.getElementById('header-logo').src = config.logoUrl;
+            database.ref('logo').once('value', snapshot => {
+                const logo = snapshot.val();
+                if (logo && logo.url) {
+                    document.getElementById('header-logo').src = logo.url;
                 }
             });
         }
