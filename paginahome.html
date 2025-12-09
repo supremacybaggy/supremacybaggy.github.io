@@ -45,7 +45,7 @@
         }
         .logo {
             height: 50px;
-            max-width: 200px;
+            max-width: 180px;
             object-fit: contain;
         }
         .menu-toggle {
@@ -99,7 +99,6 @@
             color: #ccc;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
-        /* Added padding-top to push content below fixed header */
         #main-content {
             padding-top: 80px;
         }
@@ -227,6 +226,13 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .product-category {
+            font-size: 0.65rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.2rem;
+        }
         .product-variations {
             display: flex;
             gap: 0.2rem;
@@ -250,16 +256,16 @@
             opacity: 0.1;
         }
         @media (max-width: 768px) {
-            /* Adjusted padding-top for mobile header height */
             #main-content {
-                padding-top: 60px;
+                padding-top: 70px;
             }
             .header {
-                padding: 0.5rem 1rem;
-                height: 60px;
+                padding: 0.8rem 1rem;
+                height: 70px;
             }
             .logo {
                 height: 40px;
+                max-width: 140px;
             }
             .products-section {
                 padding: 1rem 0.5rem;
@@ -287,11 +293,19 @@
             }
         }
         @media (max-width: 480px) {
-            .banner {
-                height: clamp(180px, 35vh, 300px);
+            #main-content {
+                padding-top: 60px;
             }
             .header {
-                padding: 0.5rem;
+                padding: 0.5rem 0.8rem;
+                height: 60px;
+            }
+            .logo {
+                height: 35px;
+                max-width: 120px;
+            }
+            .banner {
+                height: clamp(180px, 35vh, 300px);
             }
             .products-grid {
                 gap: 0.5rem;
@@ -327,21 +341,22 @@
     <div id="main-content">
         <header class="header">
             <div class="header-content">
-                <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
+                <a href="paginahome.html">
+                    <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
+                </a>
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
             </div>
         </header>
         <nav class="nav-menu" id="nav-menu">
             <button class="nav-close" onclick="toggleMenu()">✕</button>
             <ul class="nav-links">
-                <!-- URLs atualizadas para GitHub Pages -->
-                <li><a href="https://supremacybaggy.github.io/paginahome.html">Home</a></li>
-                <li><a href="https://supremacybaggy.github.io/categorias.html">Categorias</a></li>
-                <li><a href="https://supremacybaggy.github.io/produtosgeral.html">Produtos</a></li>
-                <li><a href="https://supremacybaggy.github.io/favoritos.html">Favoritos</a></li>
-                <li><a href="https://supremacybaggy.github.io/carrinho.html">Carrinho</a></li>
-                <li><a href="https://supremacybaggy.github.io/perfil.html">Perfil</a></li>
-                <li id="admin-link" style="display: none;"><a href="https://supremacybaggy.github.io/paineladmin.html">Painel Admin</a></li>
+                <li><a href="paginahome.html">Home</a></li>
+                <li><a href="categorias.html">Categorias</a></li>
+                <li><a href="produtosgeral.html">Produtos</a></li>
+                <li><a href="favoritos.html">Favoritos</a></li>
+                <li><a href="carrinho.html">Carrinho</a></li>
+                <li><a href="perfil.html">Perfil</a></li>
+                <li id="admin-link" style="display: none;"><a href="paineladmin.html">Painel Admin</a></li>
                 <li><a href="#" onclick="logout()">Sair</a></li>
             </ul>
         </nav>
@@ -351,8 +366,7 @@
         <section class="products-section" id="products-section">
             <div class="section-header">
                 <h2 class="section-title">Produtos em Destaque</h2>
-                <!-- URL atualizada para GitHub Pages -->
-                <a href="https://supremacybaggy.github.io/produtosgeral.html" class="view-all-link">Ver Tudo</a>
+                <a href="produtosgeral.html" class="view-all-link">Ver Tudo</a>
             </div>
             <div id="products-container">
                 <div class="loading">
@@ -420,7 +434,7 @@
         function checkAuth() {
             auth.onAuthStateChanged(user => {
                 if (!user) {
-                    window.location.href = 'https://supremacybaggy.github.io/login.html';
+                    window.location.href = 'login.html';
                     return;
                 }
                 if (user.email === 'supremacybaggy@gmail.com') {
@@ -432,24 +446,24 @@
         }
         function logout() {
             auth.signOut().then(() => {
-                window.location.href = 'https://supremacybaggy.github.io/login.html';
+                window.location.href = 'login.html';
             });
         }
         function loadSiteConfig() {
-            database.ref('config').once('value', snapshot => {
-                const config = snapshot.val();
-                if (config) {
-                    if (config.logoUrl) {
-                        document.getElementById('header-logo').src = config.logoUrl;
-                    }
-                    const bannerSection = document.getElementById('banner-section');
-                    const productsSection = document.getElementById('products-section');
-                    if (config.bannerUrl && config.bannerUrl.trim() !== '') {
-                        document.getElementById('banner-image').src = config.bannerUrl;
-                        bannerSection.classList.add('active');
-                    } else {
-                        bannerSection.classList.remove('active');
-                    }
+            database.ref('logo').once('value', snapshot => {
+                const logo = snapshot.val();
+                if (logo && logo.url) {
+                    document.getElementById('header-logo').src = logo.url;
+                }
+            });
+            database.ref('banner').once('value', snapshot => {
+                const banner = snapshot.val();
+                const bannerSection = document.getElementById('banner-section');
+                if (banner && banner.url && banner.url.trim() !== '') {
+                    document.getElementById('banner-image').src = banner.url;
+                    bannerSection.classList.add('active');
+                } else {
+                    bannerSection.classList.remove('active');
                 }
             });
         }
@@ -469,10 +483,10 @@
                     html += `
                         <div class="product-card" onclick="viewProduct('${product.id}')">
                             <div class="product-image">
-                                <img src="${product.images[0] || '/placeholder.svg?height=200&width=280'}"
-                                      alt="${product.title}" loading="lazy">
+                                <img src="${product.images[0] || '/placeholder.svg?height=200&width=280'}" alt="${product.title}" loading="lazy">
                             </div>
                             <div class="product-info">
+                                <p class="product-category">${product.category || ''}${product.subcategory ? ' - ' + product.subcategory : ''}</p>
                                 <h3 class="product-title">${product.title}</h3>
                                 <div class="product-price">R$ ${product.price.toFixed(2)}</div>
                                 <p class="product-description">${product.description.substring(0, 80)}...</p>
@@ -492,7 +506,7 @@
             });
         }
         function viewProduct(productId) {
-            window.location.href = `https://supremacybaggy.github.io/produto.html#${productId}`;
+            window.location.href = 'produto.html#' + productId;
         }
         window.addEventListener('resize', () => {
             const canvas = document.getElementById('particles-bg');
