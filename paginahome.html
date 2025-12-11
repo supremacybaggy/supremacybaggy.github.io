@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supremacy Baggy - Street Fashion</title>
-    <meta name="description" content="Supremacy Baggy - Moda street premium para o público jovem">
+    <meta name="description" content="Supremacy Baggy - Moda street premium para o publico jovem">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -57,6 +57,13 @@
             padding: 0.5rem;
             position: absolute;
             right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
         }
         .nav-menu {
             position: fixed;
@@ -81,6 +88,13 @@
             cursor: pointer;
             float: right;
             margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-close svg {
+            width: 24px;
+            height: 24px;
         }
         .nav-links {
             list-style: none;
@@ -344,11 +358,19 @@
                 <a href="paginahome.html">
                     <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
                 </a>
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
         </header>
         <nav class="nav-menu" id="nav-menu">
-            <button class="nav-close" onclick="toggleMenu()">✕</button>
+            <button class="nav-close" onclick="toggleMenu()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
             <ul class="nav-links">
                 <li><a href="paginahome.html">Home</a></li>
                 <li><a href="categorias.html">Categorias</a></li>

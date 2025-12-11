@@ -57,6 +57,13 @@
             font-size: 1.5rem;
             cursor: pointer;
             padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
         }
         .search-bar {
             background: #111;
@@ -118,6 +125,13 @@
             cursor: pointer;
             float: right;
             margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-close svg {
+            width: 24px;
+            height: 24px;
         }
         .nav-links {
             list-style: none;
@@ -326,7 +340,11 @@
                 <img src="https://i.imgur.com/ZMOggly.png" alt="Supremacy Baggy" class="logo" id="header-logo">
             </a>
             <div class="header-actions">
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
@@ -338,7 +356,11 @@
         </div>
     </div>
     <nav class="nav-menu" id="nav-menu">
-        <button class="nav-close" onclick="toggleMenu()">✕</button>
+        <button class="nav-close" onclick="toggleMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
         <ul class="nav-links">
             <li><a href="paginahome.html">Home</a></li>
             <li><a href="categorias.html">Categorias</a></li>
@@ -356,14 +378,14 @@
             <div class="filters">
                 <select class="filter-select" id="filter-category" onchange="filterProducts()">
                     <option value="">Todas Categorias</option>
-                    <option value="Calças">Calças</option>
+                    <option value="Calcas">Calcas</option>
                     <option value="Camiseta">Camiseta</option>
                     <option value="Jorts">Jorts</option>
                 </select>
                 <select class="filter-select" id="filter-sort" onchange="filterProducts()">
                     <option value="newest">Mais Recentes</option>
-                    <option value="price-asc">Menor Preço</option>
-                    <option value="price-desc">Maior Preço</option>
+                    <option value="price-asc">Menor Preco</option>
+                    <option value="price-desc">Maior Preco</option>
                     <option value="name">A-Z</option>
                 </select>
             </div>
