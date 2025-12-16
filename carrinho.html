@@ -555,9 +555,40 @@
             database.ref('users/' + user.uid + '/cart/' + cartKey).remove();
         }
         function checkout() {
-            alert('Funcionalidade de checkout em desenvolvimento!');
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            if (cartItems.length === 0) {
+                alert('Seu carrinho está vazio');
+                return;
+            }
+            
+            let mensagem = 'Olá! Gostaria de finalizar meu pedido:\n\n';
+            let total = 0;
+            
+            cartItems.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                mensagem += `${index + 1}. ${item.title}\n`;
+                if (item.color) mensagem += `   Cor: ${item.color}\n`;
+                if (item.size) mensagem += `   Tamanho: ${item.size}\n`;
+                mensagem += `   Quantidade: ${item.quantity}\n`;
+                mensagem += `   Valor unitário: R$ ${item.price.toFixed(2)}\n`;
+                mensagem += `   Subtotal: R$ ${itemTotal.toFixed(2)}\n\n`;
+            });
+            
+            mensagem += `*VALOR TOTAL: R$ ${total.toFixed(2)}*\n\n`;
+            mensagem += 'Aguardo confirmação para prosseguir com o pagamento.';
+            
+            const whatsappNumber = '559781084662';
+            const mensagemCodificada = encodeURIComponent(mensagem);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${mensagemCodificada}`;
+            
+            window.open(whatsappUrl, '_blank');
         }
         document.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
 </html>
+
