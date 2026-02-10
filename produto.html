@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produto - Supremacy Baggy</title>
+    <link rel="icon" type="image/png" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ICON%20site%20Supremacybaggy-2zoAEBdmHWpQmgChAq4xCZ2KbWk4UE.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -562,11 +563,7 @@
         }
         function checkAuth() {
             auth.onAuthStateChanged(user => {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                if (user.email === 'supremacybaggy@gmail.com') {
+                if (user && user.email === 'supremacybaggy@gmail.com') {
                     document.getElementById('admin-link').style.display = 'block';
                 }
                 loadSiteConfig();
@@ -599,7 +596,10 @@
                     return;
                 }
                 currentProduct.id = productId;
-                checkIfFavorited(productId);
+                const user = auth.currentUser;
+                if (user) {
+                    checkIfFavorited(productId);
+                }
                 renderProduct();
             });
         }
@@ -671,7 +671,6 @@
                         <span class="product-category">${p.category || ''}${p.subcategory ? ' / ' + p.subcategory : ''}</span>
                         <h1 class="product-title">${p.title}</h1>
                         <div class="product-price">R$ ${p.price.toFixed(2)}</div>
-                        <p class="product-description">${p.description}</p>
                         <div class="product-options">
                             ${colorsHtml}
                             ${sizesHtml}
@@ -692,6 +691,7 @@
                                 Adicionar aos Favoritos
                             </button>
                         </div>
+                        <p class="product-description">${p.description}</p>
                     </div>
                 </div>
             `;
@@ -714,7 +714,10 @@
         }
         function buyNow() {
             const user = auth.currentUser;
-            if (!user) return;
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
             const colors = currentProduct.variations?.cores || [];
             const sizes = currentProduct.variations?.tamanhos || [];
             if (colors.length > 0 && !selectedColor) {
@@ -741,7 +744,10 @@
         }
         function addToCart() {
             const user = auth.currentUser;
-            if (!user) return;
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
             const colors = currentProduct.variations?.cores || [];
             const sizes = currentProduct.variations?.tamanhos || [];
             if (colors.length > 0 && !selectedColor) {
@@ -768,7 +774,10 @@
         }
         function toggleFavorite() {
             const user = auth.currentUser;
-            if (!user) return;
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
             if (isFavorited) {
                 database.ref('users/' + user.uid + '/favorites').orderByChild('productId').equalTo(currentProduct.id).once('value', snapshot => {
                     snapshot.forEach(child => {
