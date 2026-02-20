@@ -117,27 +117,211 @@
         #main-content {
             padding-top: 80px;
         }
-        .banner {
-            width: 100%;
-            max-width: 100%;
-            height: clamp(300px, 50vh, 600px);
-            background: #111;
+        /* --- Barra de Anuncio (Marquee) --- */
+        .announcement-bar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: #000;
+            overflow: hidden;
+            height: 32px;
             display: none;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            margin-top: 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
         }
-        .banner.active {
+        .announcement-bar.active {
             display: flex;
         }
-        .banner img {
+        .announcement-track {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 20s linear infinite;
+        }
+        /* Pausa a animacao ao passar o mouse */
+        .announcement-bar:hover .announcement-track {
+            animation-play-state: paused;
+        }
+        .announcement-track span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #fff;
+            padding: 0 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        /* Separador entre mensagens */
+        .announcement-track span::after {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #555;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .has-announcement #main-content {
+            padding-top: 112px;
+        }
+        /* --- Banner Rotativo --- */
+        .banner-carousel {
+            width: 100%;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: #111;
+            border-radius: 0;
+            display: none;
+        }
+        .banner-carousel.active {
+            display: block;
+        }
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .banner-slide.visible {
+            opacity: 1;
+        }
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Botao centralizado dentro do banner */
+        .banner-cta {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 32px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 3;
+            white-space: nowrap;
+        }
+        .banner-cta:hover {
+            opacity: 0.85;
+            transform: translateX(-50%) scale(1.05);
+        }
+        .banner-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+        .banner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            padding: 0;
+        }
+        .banner-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+        /* Desktop / notebook: contido */
+        @media (min-width: 1024px) {
+            .banner-carousel {
+                max-width: 600px;
+                margin: 20px auto;
+                border-radius: 8px;
+            }
+        }
+        /* Celular paisagem: contido */
+        @media (orientation: landscape) and (max-width: 1023px) {
+            .banner-carousel {
+                max-width: 420px;
+                margin: 15px auto;
+                border-radius: 6px;
+            }
+        }
+        .banner-carousel.active {
+            display: block;
+        }
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .banner-slide.visible {
+            opacity: 1;
+        }
+        .banner-slide img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            max-width: 100%;
         }
+        .banner-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+        .banner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            padding: 0;
+        }
+        .banner-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+        /* Celular / tablet em modo paisagem: limita altura para nao dominar a tela */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .banner-carousel {
+                aspect-ratio: 16/9;
+                max-height: 70vh;
+            }
+        }
+        /* --- Vitrine Street / Urbana --- */
         .products-section {
             padding: 2rem 1rem;
             max-width: 1200px;
@@ -149,7 +333,19 @@
             text-align: center;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: #fff;
         }
         .section-header {
             display: flex;
@@ -164,40 +360,41 @@
             text-decoration: none;
             font-size: 0.8rem;
             font-weight: 500;
-            padding: 0.5rem 2rem;
-            border: 1px solid #666;
-            border-radius: 4px;
+            padding: 0.6rem 2.5rem;
+            border: 1px solid #fff;
+            border-radius: 0;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
         .view-all-link:hover {
-            border-color: #fff;
             background: #fff;
             color: #000;
         }
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
+            gap: 16px;
+            padding: 0 4px;
         }
         .product-card {
-            background: #111;
+            background: #0a0a0a;
             border: 1px solid #333;
-            border-radius: 6px;
+            border-radius: 10px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            border-color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.07);
+            border-color: #555;
         }
         .product-image {
             width: 100%;
-            aspect-ratio: 1/1;
-            background: #222;
+            aspect-ratio: 3/4;
+            background: #0d0d0d;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,58 +405,29 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
         .product-card:hover .product-image img {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
         .product-info {
-            padding: 0.6rem;
+            padding: 0.7rem 0.8rem;
         }
         .product-title {
             font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 0.3rem;
             text-transform: uppercase;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-        .product-price {
-            font-size: 0.95rem;
-            font-weight: 700;
+            letter-spacing: 0.5px;
             color: #fff;
-            margin-bottom: 0.4rem;
-        }
-        .product-description {
-            font-size: 0.7rem;
-            color: #ccc;
-            margin-bottom: 0.4rem;
-            line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .product-category {
-            font-size: 0.65rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 0.2rem;
         }
-        .product-variations {
-            display: flex;
-            gap: 0.2rem;
-            margin-bottom: 0.3rem;
-            flex-wrap: wrap;
-        }
-        .variation-item {
-            padding: 0.15rem 0.4rem;
-            background: #333;
-            border-radius: 2px;
-            font-size: 0.6rem;
-            font-weight: 500;
+        .product-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ccc;
         }
         #particles-bg {
             position: fixed;
@@ -274,6 +442,22 @@
             #main-content {
                 padding-top: 70px;
             }
+            .announcement-bar {
+                top: 70px;
+                height: 28px;
+            }
+            .announcement-track {
+                animation-duration: 16s;
+            }
+            .announcement-track span {
+                font-size: 0.6rem;
+                letter-spacing: 2px;
+                padding: 0 1.2rem;
+                gap: 1.2rem;
+            }
+            .has-announcement #main-content {
+                padding-top: 98px;
+            }
             .header {
                 padding: 0.8rem 1rem;
                 height: 70px;
@@ -286,15 +470,14 @@
                 padding: 1rem 0.5rem;
             }
             .section-title {
-                font-size: 1.4rem;
-                margin-bottom: 0.5rem;
+                font-size: 1.3rem;
+                letter-spacing: 3px;
             }
             .products-grid {
-                gap: 0.5rem;
+                gap: 12px;
+                padding: 0 2px;
             }
-            .banner {
-                height: clamp(200px, 40vh, 400px);
-            }
+
             .section-header {
                 flex-direction: column;
                 justify-content: center;
@@ -311,6 +494,26 @@
             #main-content {
                 padding-top: 60px;
             }
+            .announcement-bar {
+                top: 60px;
+                height: 24px;
+            }
+            .announcement-track {
+                animation-duration: 14s;
+            }
+            .announcement-track span {
+                font-size: 0.55rem;
+                letter-spacing: 1.5px;
+                padding: 0 1rem;
+                gap: 1rem;
+            }
+            .announcement-track span::after {
+                width: 3px;
+                height: 3px;
+            }
+            .has-announcement #main-content {
+                padding-top: 84px;
+            }
             .header {
                 padding: 0.5rem 0.8rem;
                 height: 60px;
@@ -319,34 +522,30 @@
                 height: 35px;
                 max-width: 120px;
             }
-            .banner {
-                height: clamp(180px, 35vh, 300px);
-            }
+
             .products-grid {
-                gap: 0.5rem;
+                gap: 10px;
                 grid-template-columns: repeat(2, 1fr);
+                padding: 0;
             }
-            .product-image {
-                height: auto;
+            .product-card {
+                border-radius: 8px;
             }
             .product-info {
-                padding: 0.5rem;
+                padding: 0.5rem 0.6rem;
             }
             .product-title {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .product-price {
-                font-size: 0.9rem;
-            }
-            .variation-item {
-                padding: 0.1rem 0.3rem;
-                font-size: 0.55rem;
+                font-size: 0.85rem;
             }
         }
         @media (min-width: 1024px) {
             .products-grid {
-                grid-template-columns: repeat(5, 1fr);
-                gap: 1rem;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+                padding: 0;
             }
         }
     </style>
@@ -366,6 +565,10 @@
                 </button>
             </div>
         </header>
+        <!-- Barra de Anuncio -->
+        <div class="announcement-bar" id="announcement-bar">
+            <div class="announcement-track" id="announcement-track"></div>
+        </div>
         <nav class="nav-menu" id="nav-menu">
             <button class="nav-close" onclick="toggleMenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -383,9 +586,11 @@
                 <li><a href="#" onclick="logout()">Sair</a></li>
             </ul>
         </nav>
-        <section class="banner" id="banner-section">
-            <img id="banner-image" src="/placeholder.svg" alt="Banner">
-        </section>
+        <!-- Banner Rotativo -->
+        <div class="banner-carousel" id="banner-carousel">
+            <div id="banner-slides"></div>
+            <div class="banner-dots" id="banner-dots"></div>
+        </div>
         <section class="products-section" id="products-section">
             <div class="section-header">
                 <h2 class="section-title">Produtos em Destaque</h2>
@@ -468,23 +673,212 @@
                 window.location.href = 'login.html';
             });
         }
+        /* --- Banner Rotativo --- */
+        var bannerData = []; /* Array de objetos: {url, link, buttonColor, buttonText} */
+        var bannerIndex = 0;
+        var bannerInterval = null;
+
         function loadSiteConfig() {
-            database.ref('logo').once('value', snapshot => {
-                const logo = snapshot.val();
+            /* Logo */
+            database.ref('logo').once('value', function(snapshot) {
+                var logo = snapshot.val();
                 if (logo && logo.url) {
                     document.getElementById('header-logo').src = logo.url;
                 }
             });
-            database.ref('banner').once('value', snapshot => {
-                const banner = snapshot.val();
-                const bannerSection = document.getElementById('banner-section');
-                if (banner && banner.url && banner.url.trim() !== '') {
-                    document.getElementById('banner-image').src = banner.url;
-                    bannerSection.classList.add('active');
-                } else {
-                    bannerSection.classList.remove('active');
+
+            /* Barra de anuncio (marquee com multiplas mensagens) */
+            database.ref('config/announcement').once('value', function(snapshot) {
+                var ann = snapshot.val();
+                if (ann && (ann.enabled === true || ann.enabled === 'true') && ann.text && ann.text.trim() !== '') {
+                    var bar = document.getElementById('announcement-bar');
+                    var track = document.getElementById('announcement-track');
+
+                    /* Suporta multiplas mensagens separadas por | */
+                    var rawTexts = ann.text.split('|').map(function(t) { return t.trim().toUpperCase(); }).filter(function(t) { return t.length > 0; });
+                    if (rawTexts.length === 0) return;
+
+                    /* Monta um bloco com todas as mensagens */
+                    var singleBlock = '';
+                    for (var m = 0; m < rawTexts.length; m++) {
+                        singleBlock += '<span>' + rawTexts[m] + '</span>';
+                    }
+
+                    /* Duplica o bloco muitas vezes para loop infinito seamless */
+                    var spans = '';
+                    for (var i = 0; i < 12; i++) {
+                        spans += singleBlock;
+                    }
+                    track.innerHTML = spans;
+                    bar.classList.add('active');
+                    document.body.classList.add('has-announcement');
                 }
             });
+
+            /* Banners: le node 'config/banners' (novo) com fallback para 'banners' e 'banner' (antigo) */
+            database.ref('config/banners').once('value', function(snapshot) {
+                var data = snapshot.val();
+                bannerData = [];
+
+                if (data) {
+                    var items = Array.isArray(data) ? data : Object.values(data);
+                    items.forEach(function(b) {
+                        if (b && b.url) {
+                            bannerData.push({
+                                url: b.url,
+                                link: b.link || '',
+                                buttonColor: b.buttonColor || '#ffffff',
+                                buttonText: b.buttonText || 'Ver mais',
+                                buttonTextColor: b.buttonTextColor || ''
+                            });
+                        }
+                    });
+                }
+
+                if (bannerData.length === 0) {
+                    database.ref('banners').once('value', function(snap2) {
+                        var data2 = snap2.val();
+                        if (data2) {
+                            var items2 = Array.isArray(data2) ? data2 : Object.values(data2);
+                            items2.forEach(function(b) {
+                                if (b && b.url) {
+                                    bannerData.push({
+                                        url: b.url,
+                                        link: b.link || '',
+                                        buttonColor: b.buttonColor || '#ffffff',
+                                        buttonText: b.buttonText || 'Ver mais',
+                                        buttonTextColor: b.buttonTextColor || ''
+                                    });
+                                }
+                            });
+                        }
+
+                        /* Fallback: campo antigo 'banner' (singular) */
+                        if (bannerData.length === 0) {
+                            database.ref('banner').once('value', function(snap) {
+                                var banner = snap.val();
+                                if (banner && banner.url && banner.url.trim() !== '') {
+                                    bannerData.push({
+                                        url: banner.url,
+                                        link: banner.link || '',
+                                        buttonColor: banner.buttonColor || '#ffffff',
+                                        buttonText: banner.buttonText || 'Ver mais',
+                                        buttonTextColor: banner.buttonTextColor || ''
+                                    });
+                                }
+                                initBannerCarousel();
+                            });
+                        } else {
+                            initBannerCarousel();
+                        }
+                    });
+                } else {
+                    initBannerCarousel();
+                }
+            });
+        }
+
+        function initBannerCarousel() {
+            var carousel = document.getElementById('banner-carousel');
+            var slidesContainer = document.getElementById('banner-slides');
+            var dotsContainer = document.getElementById('banner-dots');
+
+            if (bannerData.length === 0) {
+                carousel.classList.remove('active');
+                return;
+            }
+
+            carousel.classList.add('active');
+            slidesContainer.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            bannerData.forEach(function(banner, i) {
+                var slide = document.createElement('div');
+                slide.className = 'banner-slide' + (i === 0 ? ' visible' : '');
+
+                /* Imagem */
+                var img = document.createElement('img');
+                img.src = banner.url;
+                img.alt = 'Banner ' + (i + 1);
+                img.loading = 'lazy';
+                slide.appendChild(img);
+
+                /* Botao CTA - so aparece se tiver link */
+                if (banner.link && banner.link.trim() !== '') {
+                    var cta = document.createElement('a');
+                    cta.href = banner.link;
+                    cta.className = 'banner-cta';
+                    cta.textContent = banner.buttonText || 'Ver mais';
+                    cta.style.backgroundColor = banner.buttonColor || '#ffffff';
+                    /* Usa cor de texto personalizada se existir, senao detecta contraste automatico */
+                    if (banner.buttonTextColor && banner.buttonTextColor.trim() !== '') {
+                        cta.style.color = banner.buttonTextColor;
+                    } else {
+                        cta.style.color = isLightColor(banner.buttonColor) ? '#000' : '#fff';
+                    }
+                    cta.target = '_blank';
+                    cta.rel = 'noopener';
+                    cta.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                    slide.appendChild(cta);
+                }
+
+                slidesContainer.appendChild(slide);
+
+                /* Dot indicador */
+                var dot = document.createElement('button');
+                dot.className = 'banner-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Banner ' + (i + 1));
+                dot.addEventListener('click', (function(idx) {
+                    return function() { goToBanner(idx); };
+                })(i));
+                dotsContainer.appendChild(dot);
+            });
+
+            /* Esconde dots se so tem 1 banner */
+            if (bannerData.length <= 1) {
+                dotsContainer.style.display = 'none';
+            }
+
+            /* Rotacao automatica a cada 7s */
+            if (bannerData.length > 1) {
+                bannerInterval = setInterval(function() {
+                    goToBanner((bannerIndex + 1) % bannerData.length);
+                }, 7000);
+            }
+        }
+
+        function goToBanner(index) {
+            var slides = document.querySelectorAll('.banner-slide');
+            var dots = document.querySelectorAll('.banner-dot');
+            if (slides.length === 0) return;
+
+            slides[bannerIndex].classList.remove('visible');
+            dots[bannerIndex].classList.remove('active');
+            bannerIndex = index;
+            slides[bannerIndex].classList.add('visible');
+            dots[bannerIndex].classList.add('active');
+
+            /* Reset do timer */
+            if (bannerInterval) {
+                clearInterval(bannerInterval);
+                bannerInterval = setInterval(function() {
+                    goToBanner((bannerIndex + 1) % bannerData.length);
+                }, 7000);
+            }
+        }
+
+        /* Detecta se uma cor hex e clara para ajustar contraste do texto */
+        function isLightColor(hex) {
+            if (!hex) return true;
+            hex = hex.replace('#', '');
+            if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+            var r = parseInt(hex.substring(0, 2), 16);
+            var g = parseInt(hex.substring(2, 4), 16);
+            var b = parseInt(hex.substring(4, 6), 16);
+            var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return lum > 0.5;
         }
         function loadProducts() {
             const container = document.getElementById('products-container');
@@ -505,14 +899,8 @@
                                 <img src="${product.images[0] || '/placeholder.svg?height=200&width=280'}" alt="${product.title}" loading="lazy">
                             </div>
                             <div class="product-info">
-                                <p class="product-category">${product.category || ''}${product.subcategory ? ' - ' + product.subcategory : ''}</p>
                                 <h3 class="product-title">${product.title}</h3>
                                 <div class="product-price">R$ ${product.price.toFixed(2)}</div>
-                                <p class="product-description">${product.description.substring(0, 80)}...</p>
-                                <div class="product-variations">
-                                    ${colors.slice(0, 3).map(color => `<span class="variation-item">${color}</span>`).join('')}
-                                    ${sizes.slice(0, 2).map(size => `<span class="variation-item">${size}</span>`).join('')}
-                                </div>
                             </div>
                         </div>
                     `;

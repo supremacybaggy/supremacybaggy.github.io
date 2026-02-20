@@ -1209,6 +1209,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="#" data-section="banners">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM5 15h14v3H5z"/></svg>
+                            Banners
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" data-section="site-config">
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
                             Configurações
@@ -1278,6 +1284,8 @@
                             <option value="Calças">Calças</option>
                             <option value="Camiseta">Camiseta</option>
                             <option value="Jorts">Jorts</option>
+                            <option value="Moletom">Moletom</option>
+                            <option value="Sneakers">Sneakers</option>
                         </select>
                     </div>
                     <div class="filter-group" id="filter-subcategory-group">
@@ -1359,6 +1367,8 @@
                                         <option value="Calças">Calças</option>
                                         <option value="Camiseta">Camiseta</option>
                                         <option value="Jorts">Jorts</option>
+                                        <option value="Moletom">Moletom</option>
+                                        <option value="Sneakers">Sneakers</option>
                                     </select>
                                 </div>
 
@@ -1449,26 +1459,85 @@
                 </div>
             </section>
 
-            <section id="site-config" class="section">
-                <h2 class="section-title">Configurações do Site</h2>
+            <section id="banners" class="section">
+                <h2 class="section-title">Banners</h2>
                 
                 <div class="card">
-                    <h3 class="card-title">Banner da Página Inicial</h3>
+                    <h3 class="card-title">Banners da Pagina Inicial</h3>
+                    <p style="color:#888;font-size:0.85rem;margin-bottom:1rem;">Gerencie ate 10 banners rotativos. Cada banner pode ter um link e um botao personalizado.</p>
                     <div id="banner-message"></div>
-                    <form id="banner-form">
+
+                    <!-- Lista de banners existentes -->
+                    <div id="banners-list" style="margin-bottom:1.5rem;"></div>
+
+                    <!-- Formulario para adicionar novo banner -->
+                    <div style="border:1px solid #333;border-radius:6px;padding:1rem;background:#111;">
+                        <h4 style="margin-bottom:0.8rem;font-size:1rem;color:#fff;">Adicionar Novo Banner</h4>
+                        <form id="banner-form">
+                            <div class="form-group">
+                                <label class="form-label">URL da Imagem *</label>
+                                <input type="url" class="form-input" id="banner-url" placeholder="https://exemplo.com/banner.jpg" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Link (ao clicar no botao)</label>
+                                <input type="url" class="form-input" id="banner-link" placeholder="https://exemplo.com/promo">
+                            </div>
+                            <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+                                <div class="form-group" style="flex:1;min-width:150px;">
+                                    <label class="form-label">Texto do Botao</label>
+                                    <input type="text" class="form-input" id="banner-btn-text" placeholder="Ver mais" value="Ver mais">
+                                </div>
+                                <div class="form-group" style="flex:0 0 120px;">
+                                    <label class="form-label">Cor do Botao</label>
+                                    <input type="color" id="banner-btn-color" value="#ffffff" style="width:100%;height:38px;border:1px solid #333;border-radius:4px;background:#222;cursor:pointer;padding:2px;">
+                                </div>
+                                <div class="form-group" style="flex:0 0 120px;">
+                                    <label class="form-label">Cor do Texto</label>
+                                    <input type="color" id="banner-btn-text-color" value="#000000" style="width:100%;height:38px;border:1px solid #333;border-radius:4px;background:#222;cursor:pointer;padding:2px;">
+                                </div>
+                            </div>
+                            <div class="preview-container" id="banner-preview-container">
+                                <div class="preview-placeholder">Pre-visualizacao do banner</div>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary">Adicionar Banner</button>
+                            </div>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Barra de Anuncio</h3>
+                    <p style="color:#888;font-size:0.85rem;margin-bottom:1rem;">Faixa deslizante abaixo do cabecalho (marquee). Use <strong style="color:#ccc;">|</strong> para separar multiplas mensagens. Ex: <em style="color:#aaa;">FRETE GRATIS | NOVA COLECAO | 50% OFF</em></p>
+                    <div id="announcement-message"></div>
+                    <form id="announcement-form">
                         <div class="form-group">
-                            <label class="form-label">URL do Banner</label>
-                            <input type="url" class="form-input" id="banner-url" placeholder="https://exemplo.com/banner.jpg">
+                            <div style="display:flex;align-items:center;gap:0.7rem;">
+                                <span class="form-label" style="margin:0;">Ativo</span>
+                                <div id="announcement-toggle" onclick="toggleAnnouncement()" style="position:relative;display:inline-block;width:44px;height:24px;background:#333;border-radius:12px;cursor:pointer;transition:background 0.3s;flex-shrink:0;">
+                                    <span id="announcement-toggle-knob" style="position:absolute;left:4px;top:4px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left 0.3s;"></span>
+                                </div>
+                                <input type="hidden" id="announcement-enabled" value="false">
+                            </div>
                         </div>
-                        <div class="preview-container" id="banner-preview-container">
-                            <div class="preview-placeholder">Nenhum banner configurado</div>
+                        <div class="form-group">
+                            <label class="form-label">Textos do Anuncio <span style="color:#666;font-weight:400;font-size:0.7rem;">(separe com | )</span></label>
+                            <input type="text" class="form-input" id="announcement-text" placeholder="FRETE GRATIS PARA TODO BRASIL | NOVA COLECAO | ATE 50% OFF" maxlength="200">
+                        </div>
+                        <!-- Preview -->
+                        <div style="margin-bottom:1rem;border:1px solid #333;border-radius:4px;overflow:hidden;height:32px;display:flex;align-items:center;background:#000;" id="announcement-preview">
+                            <div style="font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#555;padding:0 1rem;white-space:nowrap;">Pre-visualizacao</div>
                         </div>
                         <div class="btn-group">
-                            <button type="submit" class="btn btn-primary">Salvar Banner</button>
-                            <button type="button" class="btn btn-danger" onclick="removeBanner()">Remover</button>
+                            <button type="submit" class="btn btn-primary">Salvar Anuncio</button>
+                            <button type="button" class="btn btn-danger" onclick="removeAnnouncement()">Desativar</button>
                         </div>
                     </form>
                 </div>
+                </div>
+            </section>
+
+            <section id="site-config" class="section">
+                <h2 class="section-title">Configurações do Site</h2>
                 
                 <div class="card">
                     <h3 class="card-title">Logo do Site</h3>
@@ -1532,7 +1601,9 @@
         var CATEGORIES = {
             'Calças': ['Baggy', 'Wide Leg', 'Flare', 'BootCut'],
             'Camiseta': ['Polo Ralph Lauren'],
-            'Jorts': []
+            'Jorts': [],
+            'Moletom': [],
+            'Sneakers': []
         };
 
         var allProducts = [];
@@ -1596,13 +1667,22 @@
 
             document.getElementById('banner-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                saveBanner();
+                addBanner();
             });
 
             document.getElementById('logo-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 saveLogo();
             });
+
+            document.getElementById('announcement-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveAnnouncement();
+            });
+
+            /* Toggle do anuncio agora e controlado pelo onclick do div #announcement-toggle */
+
+document.getElementById('announcement-text').addEventListener('input', updateAnnouncementPreview);
 
             document.getElementById('confirm-delete-btn').addEventListener('click', deleteProduct);
 
@@ -1694,6 +1774,14 @@
                 loadProducts();
             }
 
+            if (sectionId === 'banners') {
+                loadBannersData();
+            }
+
+            if (sectionId === 'site-config') {
+                loadAnnouncement();
+            }
+
             if (sectionId === 'add-product' && !currentEditingProduct) {
                 resetProductForm();
             }
@@ -1707,15 +1795,53 @@
             }, 5000);
         }
 
+        /* === BANNERS (multi-banner system) === */
+        var adminBanners = [];
+
         function loadSiteConfig() {
-            database.ref('banner').once('value').then(function(snapshot) {
+            /* Carrega banners: tenta 'config/banners' primeiro, depois 'banners', depois 'banner' (antigo) */
+            database.ref('config/banners').once('value').then(function(snapshot) {
                 var data = snapshot.val();
-                if (data && data.url) {
-                    document.getElementById('banner-url').value = data.url;
-                    updateBannerPreview(data.url);
+                adminBanners = [];
+
+                if (data) {
+                    var items = Array.isArray(data) ? data : Object.values(data);
+                    items.forEach(function(b) {
+                        if (b && b.url) adminBanners.push(b);
+                    });
                 }
+
+                if (adminBanners.length === 0) {
+                    return database.ref('banners').once('value').then(function(snap2) {
+                        var data2 = snap2.val();
+                        if (data2) {
+                            var items2 = Array.isArray(data2) ? data2 : Object.values(data2);
+                            items2.forEach(function(b) {
+                                if (b && b.url) adminBanners.push(b);
+                            });
+                        }
+                        if (adminBanners.length === 0) {
+                            return database.ref('banner').once('value').then(function(snap) {
+                                var old = snap.val();
+                                if (old && old.url) {
+                                    adminBanners.push({
+                                        url: old.url,
+                                        link: old.link || '',
+                                        buttonColor: old.buttonColor || '#ffffff',
+                                        buttonText: old.buttonText || 'Ver mais',
+                                        buttonTextColor: old.buttonTextColor || '#000000'
+                                    });
+                                }
+                                renderBannersList();
+                            });
+                        }
+                        renderBannersList();
+                    });
+                }
+                renderBannersList();
             });
 
+            /* Logo */
             database.ref('logo').once('value').then(function(snapshot) {
                 var data = snapshot.val();
                 if (data && data.url) {
@@ -1726,12 +1852,149 @@
             });
         }
 
+        function renderBannersList() {
+            var container = document.getElementById('banners-list');
+            if (adminBanners.length === 0) {
+                container.innerHTML = '<p style="color:#666;text-align:center;padding:1rem;">Nenhum banner configurado.</p>';
+                return;
+            }
+            var html = '';
+            adminBanners.forEach(function(b, i) {
+                html += '<div style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem;border:1px solid #333;border-radius:6px;margin-bottom:0.6rem;background:#0a0a0a;">';
+                html += '<img src="' + b.url + '" alt="Banner ' + (i+1) + '" style="width:70px;height:88px;object-fit:cover;border-radius:4px;flex-shrink:0;" onerror="this.style.background=\'#333\'">';
+                html += '<div style="flex:1;min-width:0;">';
+                html += '<p style="font-weight:600;font-size:0.85rem;margin-bottom:2px;">Banner ' + (i+1) + '</p>';
+                if (b.link) {
+                    html += '<p style="font-size:0.7rem;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Link: ' + b.link + '</p>';
+                }
+                html += '<div style="display:flex;align-items:center;gap:6px;margin-top:4px;">';
+                html += '<span style="width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid #555;background:' + (b.buttonColor || '#fff') + ';flex-shrink:0;"></span>';
+                html += '<span style="font-size:0.7rem;color:' + (b.buttonTextColor || '#aaa') + ';background:' + (b.buttonColor || '#fff') + ';padding:1px 6px;border-radius:3px;">' + (b.buttonText || 'Ver mais') + '</span>';
+                html += '</div>';
+                html += '</div>';
+                html += '<button onclick="removeBannerAt(' + i + ')" style="background:#dc3545;color:#fff;border:none;border-radius:4px;padding:6px 10px;cursor:pointer;font-size:0.75rem;flex-shrink:0;">Remover</button>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function addBanner() {
+            var url = document.getElementById('banner-url').value.trim();
+            var link = document.getElementById('banner-link').value.trim();
+            var btnText = document.getElementById('banner-btn-text').value.trim() || 'Ver mais';
+            var btnColor = document.getElementById('banner-btn-color').value || '#ffffff';
+            var btnTextColor = document.getElementById('banner-btn-text-color').value || '#000000';
+
+            if (!url) {
+                showMessage('banner-message', 'Insira a URL da imagem do banner.', 'error');
+                return;
+            }
+
+            if (adminBanners.length >= 10) {
+                showMessage('banner-message', 'Limite de 10 banners atingido. Remova um antes de adicionar.', 'error');
+                return;
+            }
+
+            adminBanners.push({
+                url: url,
+                link: link,
+                buttonColor: btnColor,
+                buttonText: btnText,
+                buttonTextColor: btnTextColor
+            });
+
+            saveBannersToFirebase('Banner adicionado com sucesso!');
+
+            /* Limpa formulario */
+            document.getElementById('banner-url').value = '';
+            document.getElementById('banner-link').value = '';
+            document.getElementById('banner-btn-text').value = 'Ver mais';
+            document.getElementById('banner-btn-color').value = '#ffffff';
+            document.getElementById('banner-btn-text-color').value = '#000000';
+            updateBannerPreview('');
+        }
+
+        function removeBannerAt(index) {
+            if (!confirm('Remover o banner ' + (index + 1) + '?')) return;
+            adminBanners.splice(index, 1);
+            saveBannersToFirebase('Banner removido!');
+        }
+
+        function loadBannersData() {
+            database.ref('config/banners').once('value').then(function(snapshot) {
+                var data = snapshot.val();
+                adminBanners = [];
+
+                if (data) {
+                    var items = Array.isArray(data) ? data : Object.values(data);
+                    items.forEach(function(b) {
+                        if (b && b.url) adminBanners.push(b);
+                    });
+                }
+
+                if (adminBanners.length === 0) {
+                    return database.ref('banners').once('value').then(function(snap2) {
+                        var data2 = snap2.val();
+                        if (data2) {
+                            var items2 = Array.isArray(data2) ? data2 : Object.values(data2);
+                            items2.forEach(function(b) {
+                                if (b && b.url) adminBanners.push(b);
+                            });
+                        }
+                        if (adminBanners.length === 0) {
+                            return database.ref('banner').once('value').then(function(snap) {
+                                var old = snap.val();
+                                if (old && old.url) {
+                                    adminBanners.push({
+                                        url: old.url,
+                                        link: old.link || '',
+                                        buttonColor: old.buttonColor || '#ffffff',
+                                        buttonText: old.buttonText || 'Ver mais',
+                                        buttonTextColor: old.buttonTextColor || '#000000'
+                                    });
+                                }
+                                renderBannersList();
+                            });
+                        }
+                        renderBannersList();
+                    });
+                }
+                renderBannersList();
+            });
+        }
+
+        function saveBannersToFirebase(msg) {
+            /*
+             * Salva nos nodes que TEM permissao nas regras do Firebase:
+             *   - 'banner'  (singular) -> regra propria
+             *   - 'config/banners'     -> herda da regra de 'config'
+             * NUNCA escreve em 'banners' (plural) pois NAO tem regra.
+             */
+            var firstBanner = adminBanners.length > 0 ? adminBanners[0] : null;
+
+            var bannersObj = {};
+            adminBanners.forEach(function(b, i) { bannersObj[i] = b; });
+
+            var promises = [
+                database.ref('banner').set(firstBanner),
+                database.ref('config/banners').set(bannersObj)
+            ];
+
+            Promise.all(promises).then(function() {
+                renderBannersList();
+                showMessage('banner-message', msg || 'Banners atualizados!', 'success');
+            }).catch(function(error) {
+                console.log('[v0] saveBannersToFirebase error:', error.code, error.message);
+                showMessage('banner-message', 'Erro ao salvar: ' + error.message, 'error');
+            });
+        }
+
         function updateBannerPreview(url) {
             var container = document.getElementById('banner-preview-container');
             if (url && url.trim()) {
-                container.innerHTML = '<img src="' + url + '" alt="Banner Preview" class="preview-image" onerror="this.parentElement.innerHTML=\'<div class=preview-placeholder>Erro ao carregar imagem</div>\'">';
+                container.innerHTML = '<img src="' + url + '" alt="Banner Preview" class="preview-image" style="max-height:200px;object-fit:contain;" onerror="this.parentElement.innerHTML=\'<div class=preview-placeholder>Erro ao carregar imagem</div>\'">';
             } else {
-                container.innerHTML = '<div class="preview-placeholder">Nenhum banner configurado</div>';
+                container.innerHTML = '<div class="preview-placeholder">Pre-visualizacao do banner</div>';
             }
         }
 
@@ -1742,36 +2005,6 @@
             } else {
                 container.innerHTML = '<div class="preview-placeholder">Nenhuma logo configurada</div>';
             }
-        }
-
-        function saveBanner() {
-            var bannerUrl = document.getElementById('banner-url').value.trim();
-            
-            if (!bannerUrl) {
-                showMessage('banner-message', 'Por favor, insira uma URL válida', 'error');
-                return;
-            }
-            
-            database.ref('banner').set({ 
-                url: bannerUrl, 
-                updatedAt: firebase.database.ServerValue.TIMESTAMP 
-            }).then(function() {
-                showMessage('banner-message', 'Banner salvo com sucesso!', 'success');
-            }).catch(function(error) {
-                showMessage('banner-message', 'Erro ao salvar: ' + error.message, 'error');
-            });
-        }
-
-        function removeBanner() {
-            if (!confirm('Remover o banner da página inicial?')) return;
-            
-            database.ref('banner').remove().then(function() {
-                document.getElementById('banner-url').value = '';
-                updateBannerPreview(null);
-                showMessage('banner-message', 'Banner removido!', 'success');
-            }).catch(function(error) {
-                showMessage('banner-message', 'Erro: ' + error.message, 'error');
-            });
         }
 
         function saveLogo() {
@@ -1804,6 +2037,86 @@
             }).catch(function(error) {
                 showMessage('logo-message', 'Erro: ' + error.message, 'error');
             });
+        }
+
+        /* --- Barra de Anuncio (Marquee com multiplas mensagens) --- */
+
+        /* Alterna o estado do toggle (ativo/inativo) */
+        function toggleAnnouncement() {
+            var input = document.getElementById('announcement-enabled');
+            var isOn = input.value === 'true';
+            var newState = !isOn;
+            input.value = newState ? 'true' : 'false';
+            updateAnnouncementToggleVisual(newState);
+        }
+
+        /* Atualiza visual do toggle (cor + posicao da bolinha) */
+        function updateAnnouncementToggleVisual(on) {
+            var track = document.getElementById('announcement-toggle');
+            var knob = document.getElementById('announcement-toggle-knob');
+            if (on) {
+                track.style.background = '#28a745';
+                knob.style.left = '24px';
+            } else {
+                track.style.background = '#333';
+                knob.style.left = '4px';
+            }
+        }
+
+        function loadAnnouncement() {
+            database.ref('config/announcement').once('value').then(function(snapshot) {
+                var ann = snapshot.val();
+                if (ann) {
+                    var isEnabled = !!ann.enabled;
+                    document.getElementById('announcement-enabled').value = isEnabled ? 'true' : 'false';
+                    document.getElementById('announcement-text').value = ann.text || '';
+                    updateAnnouncementToggleVisual(isEnabled);
+                    updateAnnouncementPreview();
+                }
+            });
+        }
+
+        function saveAnnouncement() {
+            var enabled = document.getElementById('announcement-enabled').value === 'true';
+            var text = document.getElementById('announcement-text').value.trim();
+
+            if (enabled && !text) {
+                showMessage('announcement-message', 'Insira o texto do anuncio.', 'error');
+                return;
+            }
+
+            database.ref('config/announcement').set({
+                enabled: enabled,
+                text: text
+            }).then(function() {
+                showMessage('announcement-message', enabled ? 'Anuncio ativado e salvo!' : 'Anuncio salvo (desativado).', 'success');
+            }).catch(function(error) {
+                showMessage('announcement-message', 'Erro: ' + error.message, 'error');
+            });
+        }
+
+        function removeAnnouncement() {
+            document.getElementById('announcement-enabled').value = 'false';
+            updateAnnouncementToggleVisual(false);
+            database.ref('config/announcement').set({ enabled: false, text: '' }).then(function() {
+                document.getElementById('announcement-text').value = '';
+                updateAnnouncementPreview();
+                showMessage('announcement-message', 'Anuncio desativado!', 'success');
+            });
+        }
+
+        function updateAnnouncementPreview() {
+            var rawText = document.getElementById('announcement-text').value.trim().toUpperCase() || 'PREVIEW';
+            var texts = rawText.split('|').map(function(t) { return t.trim(); }).filter(function(t) { return t.length > 0; });
+            var preview = document.getElementById('announcement-preview');
+            var content = '';
+            for (var i = 0; i < 3; i++) {
+                for (var m = 0; m < texts.length; m++) {
+                    content += '<span style="font-family:Oswald,sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff;padding:0 1.5rem;white-space:nowrap;display:inline-flex;align-items:center;gap:1.5rem;">' + texts[m] + '<span style="display:inline-block;width:4px;height:4px;background:#555;border-radius:50%;flex-shrink:0;"></span></span>';
+                }
+            }
+            preview.style.background = '#000';
+            preview.innerHTML = '<div style="display:flex;white-space:nowrap;overflow:hidden;">' + content + '</div>';
         }
 
         function loadProducts() {

@@ -31,6 +31,55 @@
             padding: 1rem 2rem;
             border-bottom: 1px solid #333;
         }
+        /* --- Barra de Anuncio (Marquee) --- */
+        .announcement-bar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: #000;
+            overflow: hidden;
+            height: 32px;
+            display: none;
+            align-items: center;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+        .announcement-bar.active { display: flex; }
+        .announcement-track {
+            display: flex;
+            white-space: nowrap;
+            animation: marquee-scroll 20s linear infinite;
+        }
+        .announcement-bar:hover .announcement-track {
+            animation-play-state: paused;
+        }
+        .announcement-track span {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #fff;
+            padding: 0 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .announcement-track span::after {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: #555;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        @keyframes marquee-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
         .header-content {
             display: flex;
             justify-content: center;
@@ -113,9 +162,9 @@
         .main-content {
             margin-top: 100px;
             padding: 2rem;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+        .has-announcement .main-content {
+            margin-top: 128px;
         }
         .page-title {
             font-size: 2rem;
@@ -207,6 +256,10 @@
                 padding: 1rem;
                 margin-top: 80px;
             }
+            .has-announcement .main-content { margin-top: 108px; }
+            .announcement-bar { top: 70px; height: 28px; }
+            .announcement-track { animation-duration: 16s; }
+            .announcement-track span { font-size: 0.6rem; letter-spacing: 2px; padding: 0 1.2rem; gap: 1.2rem; }
             .page-title {
                 font-size: 1.5rem;
             }
@@ -234,6 +287,11 @@
                 padding: 0.8rem;
                 margin-top: 70px;
             }
+            .has-announcement .main-content { margin-top: 94px; }
+            .announcement-bar { top: 60px; height: 24px; }
+            .announcement-track { animation-duration: 14s; }
+            .announcement-track span { font-size: 0.55rem; letter-spacing: 1.5px; padding: 0 1rem; gap: 1rem; }
+            .announcement-track span::after { width: 3px; height: 3px; }
             .category-info {
                 padding: 1rem;
             }
@@ -256,6 +314,9 @@
             </button>
         </div>
     </header>
+    <div class="announcement-bar" id="announcement-bar">
+        <div class="announcement-track" id="announcement-track"></div>
+    </div>
     <nav class="nav-menu" id="nav-menu">
         <button class="nav-close" onclick="toggleMenu()">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -339,6 +400,26 @@
                 const logo = snapshot.val();
                 if (logo && logo.url) {
                     document.getElementById('header-logo').src = logo.url;
+                }
+            });
+            database.ref('config/announcement').once('value', function(snapshot) {
+                var ann = snapshot.val();
+                if (ann && (ann.enabled === true || ann.enabled === 'true') && ann.text && ann.text.trim() !== '') {
+                    var bar = document.getElementById('announcement-bar');
+                    var track = document.getElementById('announcement-track');
+                    var rawTexts = ann.text.split('|').map(function(t) { return t.trim().toUpperCase(); }).filter(function(t) { return t.length > 0; });
+                    if (rawTexts.length === 0) return;
+                    var singleBlock = '';
+                    for (var m = 0; m < rawTexts.length; m++) {
+                        singleBlock += '<span>' + rawTexts[m] + '</span>';
+                    }
+                    var spans = '';
+                    for (var i = 0; i < 12; i++) {
+                        spans += singleBlock;
+                    }
+                    track.innerHTML = spans;
+                    bar.classList.add('active');
+                    document.body.classList.add('has-announcement');
                 }
             });
         }

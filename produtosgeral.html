@@ -31,6 +31,14 @@
             padding: 1rem 2rem;
             border-bottom: 1px solid #333;
         }
+        /* --- Barra de Anuncio (Marquee) --- */
+        .announcement-bar{position:fixed;top:80px;left:0;right:0;z-index:999;background:#000;overflow:hidden;height:32px;display:none;align-items:center;border-top:1px solid #333;border-bottom:1px solid #333;}
+        .announcement-bar.active{display:flex;}
+        .announcement-track{display:flex;white-space:nowrap;animation:marquee-scroll 20s linear infinite;}
+        .announcement-bar:hover .announcement-track{animation-play-state:paused;}
+        .announcement-track span{font-family:'Oswald',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff;padding:0 1.5rem;display:inline-flex;align-items:center;gap:1.5rem;}
+        .announcement-track span::after{content:'';display:inline-block;width:4px;height:4px;background:#555;border-radius:50%;flex-shrink:0;}
+        @keyframes marquee-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
         .header-content {
             display: flex;
             justify-content: center;
@@ -195,26 +203,28 @@
         }
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 0 4px;
         }
         .product-card {
-            background: #111;
+            background: #0a0a0a;
             border: 1px solid #333;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            border-color: #fff;
+            transform: scale(1.03);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.07);
+            border-color: #555;
         }
         .product-image {
             width: 100%;
-            aspect-ratio: 1/1;
-            background: #222;
+            aspect-ratio: 3/4;
+            background: #0d0d0d;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -225,34 +235,29 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
         .product-card:hover .product-image img {
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
         .product-info {
-            padding: 1rem;
-        }
-        .product-category {
-            font-size: 0.75rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.3rem;
+            padding: 0.7rem 0.8rem;
         }
         .product-title {
-            font-size: 1rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
             text-transform: uppercase;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            letter-spacing: 0.5px;
+            color: #fff;
+            margin-bottom: 0.2rem;
         }
         .product-price {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
-            color: #fff;
+            color: #ccc;
         }
         .empty-state {
             text-align: center;
@@ -293,7 +298,15 @@
             }
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                gap: 12px;
+                padding: 0 2px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+                padding: 0;
             }
         }
         @media (max-width: 480px) {
@@ -313,16 +326,20 @@
                 margin-top: 115px;
             }
             .products-grid {
-                gap: 0.8rem;
+                gap: 6px;
             }
             .product-info {
-                padding: 0.8rem;
+                padding: 0.6rem;
             }
             .product-title {
-                font-size: 0.85rem;
+                font-size: 0.7rem;
             }
             .product-price {
-                font-size: 1rem;
+                font-size: 0.9rem;
+            }
+            .product-btn-buy {
+                padding: 0.5rem;
+                font-size: 0.65rem;
             }
             .filters {
                 width: 100%;
@@ -349,6 +366,9 @@
             </div>
         </div>
     </header>
+    <div class="announcement-bar" id="announcement-bar">
+        <div class="announcement-track" id="announcement-track"></div>
+    </div>
     <div class="search-bar">
         <div class="search-bar-content">
             <div class="search-container">
@@ -379,9 +399,11 @@
             <div class="filters">
                 <select class="filter-select" id="filter-category" onchange="filterProducts()">
                     <option value="">Todas Categorias</option>
-                    <option value="Calcas">Calcas</option>
+                    <option value="Calças">Calças</option>
                     <option value="Camiseta">Camiseta</option>
                     <option value="Jorts">Jorts</option>
+                    <option value="Moletom">Moletom</option>
+                    <option value="Sneakers">Sneakers</option>
                 </select>
                 <select class="filter-select" id="filter-sort" onchange="filterProducts()">
                     <option value="newest">Mais Recentes</option>
@@ -435,6 +457,26 @@
                 const logo = snapshot.val();
                 if (logo && logo.url) {
                     document.getElementById('header-logo').src = logo.url;
+                }
+            });
+            database.ref('config/announcement').once('value', function(snapshot) {
+                var ann = snapshot.val();
+                if (ann && (ann.enabled === true || ann.enabled === 'true') && ann.text && ann.text.trim() !== '') {
+                    var bar = document.getElementById('announcement-bar');
+                    var track = document.getElementById('announcement-track');
+                    var rawTexts = ann.text.split('|').map(function(t) { return t.trim().toUpperCase(); }).filter(function(t) { return t.length > 0; });
+                    if (rawTexts.length === 0) return;
+                    var singleBlock = '';
+                    for (var m = 0; m < rawTexts.length; m++) singleBlock += '<span>' + rawTexts[m] + '</span>';
+                    var spans = '';
+                    for (var i = 0; i < 12; i++) spans += singleBlock;
+                    track.innerHTML = spans;
+                    bar.classList.add('active');
+                    /* Empurra conteudo pra baixo */
+                    var mc = document.querySelector('.main-content');
+                    if (mc) mc.style.marginTop = (parseInt(getComputedStyle(mc).marginTop) + 32) + 'px';
+                    var sb = document.querySelector('.search-bar');
+                    if (sb) sb.style.top = (parseInt(getComputedStyle(sb).top) + 32) + 'px';
                 }
             });
         }
@@ -516,10 +558,11 @@
                             <img src="${p.images?.[0] || '/placeholder.svg'}" alt="${p.title}" loading="lazy">
                         </div>
                         <div class="product-info">
-                            <p class="product-category">${p.category || ''}${p.subcategory ? ' - ' + p.subcategory : ''}</p>
+                            <p class="product-category">${p.category || ''}${p.subcategory ? ' / ' + p.subcategory : ''}</p>
                             <h3 class="product-title">${p.title}</h3>
                             <div class="product-price">R$ ${p.price.toFixed(2)}</div>
                         </div>
+                        <button class="product-btn-buy">Comprar</button>
                     </div>
                 `;
             });
