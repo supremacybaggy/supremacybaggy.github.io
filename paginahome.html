@@ -917,7 +917,7 @@
                             <h3 class="product-title">${product.title}</h3>
                             <div class="product-price">R$ ${product.price.toFixed(2)}</div>
                         </div>
-                        <button class="product-btn-buy" onclick="event.stopPropagation(); window.location.href='produto.html#'+('${key}')">Comprar</button>
+                        <button class="product-btn-buy" onclick="event.stopPropagation(); window.location.href='produto.html#'+('${product.id}')">Comprar</button>
                     </div>
                 `;
                 });
