@@ -257,6 +257,23 @@
             font-weight: 700;
             color: #ccc;
         }
+        .product-btn-buy {
+            width: 100%;
+            padding: 0.5rem 0;
+            background: #fff;
+            color: #000;
+            border: none;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .product-btn-buy:hover {
+            background: #ddd;
+        }
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
@@ -336,7 +353,7 @@
                 font-size: 0.9rem;
             }
             .product-btn-buy {
-                padding: 0.5rem;
+                padding: 0.4rem 0;
                 font-size: 0.65rem;
             }
             .filters {
@@ -559,6 +576,7 @@
                             <h3 class="product-title">${p.title}</h3>
                             <div class="product-price">R$ ${p.price.toFixed(2)}</div>
                         </div>
+                        <button class="product-btn-buy" onclick="event.stopPropagation(); window.location.href='produto.html#'+('${p.id}')">Comprar</button>
                     </div>
                 `;
             });
