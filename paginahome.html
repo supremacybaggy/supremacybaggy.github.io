@@ -116,6 +116,8 @@
         }
         #main-content {
             padding-top: 80px;
+            display: flex;
+            flex-direction: column;
         }
         /* --- Barra de Anuncio (Marquee) --- */
         .announcement-bar {
@@ -255,72 +257,26 @@
             background: #fff;
             transform: scale(1.3);
         }
-        /* Desktop / notebook: borda a borda */
-        @media (min-width: 1024px) {
+        /* Desktop / notebook: full width, aspect-ratio 4:5 sem limite de altura */
+        @media (min-width: 769px) {
             .banner-carousel {
                 width: 100%;
                 max-width: 100%;
                 margin: 0;
                 border-radius: 0;
-                aspect-ratio: 16/7;
+                aspect-ratio: 4/5;
             }
         }
-        /* Celular paisagem */
-        @media (orientation: landscape) and (max-width: 1023px) {
-            .banner-carousel {
-                width: 100%;
-                max-width: 100%;
-                margin: 0;
-                border-radius: 0;
-            }
-        }
-        .banner-carousel.active {
-            display: block;
-        }
-        .banner-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out;
-        }
-        .banner-slide.visible {
-            opacity: 1;
-        }
-        .banner-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .banner-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 5;
-        }
-        .banner-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-            padding: 0;
-        }
-        .banner-dot.active {
-            background: #fff;
-            transform: scale(1.3);
-        }
-        /* Celular / tablet em modo paisagem: limita altura para nao dominar a tela */
+        /* Celular paisagem: limita altura */
         @media (orientation: landscape) and (max-height: 500px) {
-            .banner-carousel {
+            .banner-carousel,
+            .banner-carousel.active {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
                 aspect-ratio: 16/9;
+                height: auto;
                 max-height: 70vh;
             }
         }
@@ -564,6 +520,17 @@
                 grid-template-columns: repeat(4, 1fr);
                 gap: 20px;
                 padding: 0;
+            }
+            .products-section {
+                padding: 3rem 2rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .section-header {
+                flex-direction: row;
+                justify-content: center;
+                gap: 2rem;
             }
         }
     </style>
