@@ -262,6 +262,25 @@
             background: #fff;
             color: #000;
         }
+        .guest-login-hint {
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            color: #aaa;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .guest-login-hint a {
+            color: #fff;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .guest-login-hint a:hover {
+            color: #ccc;
+        }
         .empty-cart {
             text-align: center;
             padding: 4rem 2rem;
@@ -440,21 +459,42 @@
         const auth = firebase.auth();
         const database = firebase.database();
         let cartItems = [];
+        let currentUser = null;
         function toggleMenu() {
             document.getElementById('nav-menu').classList.toggle('open');
         }
         function checkAuth() {
             auth.onAuthStateChanged(user => {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                if (user.email === 'supremacybaggy@gmail.com') {
+                currentUser = user;
+                if (user && user.email === 'supremacybaggy@gmail.com') {
                     document.getElementById('admin-link').style.display = 'block';
                 }
                 loadSiteConfig();
-                loadCart(user.uid);
+                if (user) {
+                    mergeGuestCartToFirebase(user.uid);
+                } else {
+                    loadGuestCart();
+                }
             });
+        }
+        function mergeGuestCartToFirebase(uid) {
+            const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+            if (guestCart.length > 0) {
+                const promises = guestCart.map(item => {
+                    const { cartKey, ...itemData } = item;
+                    return database.ref('users/' + uid + '/cart').push(itemData);
+                });
+                Promise.all(promises).then(() => {
+                    localStorage.removeItem('guestCart');
+                    loadCart(uid);
+                });
+            } else {
+                loadCart(uid);
+            }
+        }
+        function loadGuestCart() {
+            cartItems = JSON.parse(localStorage.getItem('guestCart') || '[]');
+            renderCart();
         }
         function logout() {
             auth.signOut().then(() => {
@@ -563,30 +603,38 @@
                         </div>
                         <button class="btn-checkout" onclick="checkout()">Finalizar Compra</button>
                         <a href="produtosgeral.html" class="btn-continue">Continuar Comprando</a>
+                        ${!currentUser ? `<div class="guest-login-hint">Fazendo compra como visitante. <a href="login.html">Entrar ou criar conta</a> para salvar seu histórico de pedidos.</div>` : ''}
                     </div>
                 </div>
             `;
         }
         function updateQuantity(cartKey, newQuantity) {
-            const user = auth.currentUser;
-            if (!user) return;
             if (newQuantity <= 0) {
                 removeItem(cartKey);
                 return;
             }
-            database.ref('users/' + user.uid + '/cart/' + cartKey).update({
-                quantity: newQuantity
-            });
+            if (currentUser) {
+                database.ref('users/' + currentUser.uid + '/cart/' + cartKey).update({ quantity: newQuantity });
+            } else {
+                const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+                const idx = guestCart.findIndex(i => i.cartKey === cartKey);
+                if (idx !== -1) {
+                    guestCart[idx].quantity = newQuantity;
+                    localStorage.setItem('guestCart', JSON.stringify(guestCart));
+                    loadGuestCart();
+                }
+            }
         }
         function removeItem(cartKey) {
-            const user = auth.currentUser;
-            if (!user) return;
-            database.ref('users/' + user.uid + '/cart/' + cartKey).remove();
+            if (currentUser) {
+                database.ref('users/' + currentUser.uid + '/cart/' + cartKey).remove();
+            } else {
+                const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]').filter(i => i.cartKey !== cartKey);
+                localStorage.setItem('guestCart', JSON.stringify(guestCart));
+                loadGuestCart();
+            }
         }
         function checkout() {
-            const user = auth.currentUser;
-            if (!user) return;
-            
             if (cartItems.length === 0) {
                 alert('Seu carrinho está vazio');
                 return;

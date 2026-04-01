@@ -740,11 +740,6 @@
             element.classList.add('selected');
         }
         function buyNow() {
-            const user = auth.currentUser;
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
             const colors = currentProduct.variations?.cores || [];
             const sizes = currentProduct.variations?.tamanhos || [];
             if (colors.length > 0 && !selectedColor) {
@@ -770,11 +765,6 @@
             window.open(whatsappUrl, '_blank');
         }
         function addToCart() {
-            const user = auth.currentUser;
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
             const colors = currentProduct.variations?.cores || [];
             const sizes = currentProduct.variations?.tamanhos || [];
             if (colors.length > 0 && !selectedColor) {
@@ -795,9 +785,21 @@
                 quantity: 1,
                 addedAt: Date.now()
             };
-            database.ref('users/' + user.uid + '/cart').push(cartItem).then(() => {
+            const user = auth.currentUser;
+            if (user) {
+                database.ref('users/' + user.uid + '/cart').push(cartItem).then(() => {
+                    showToast('Produto adicionado ao carrinho!');
+                    setTimeout(() => window.location.href = 'carrinho.html', 500);
+                });
+            } else {
+                // Visitante: salva no localStorage
+                const guestCart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+                cartItem.cartKey = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                guestCart.push(cartItem);
+                localStorage.setItem('guestCart', JSON.stringify(guestCart));
                 showToast('Produto adicionado ao carrinho!');
-            });
+            }
+                setTimeout(() => window.location.href = 'carrinho.html', 500);
         }
         function toggleFavorite() {
             const user = auth.currentUser;
